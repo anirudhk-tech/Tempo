@@ -203,10 +203,10 @@ cmake --build build-tsan -j
 # Build benchmark and data generator
 cmake --build build -j
 
-# Generate test data (num_of_adds Add Orders; Exec/Cancel added randomly)
-./build/tempo_data 1000000 > data/itch_sample
+# Generate test data (num_of_adds Add Orders; Exec/Cancel added randomly; file created automatically in data/itch_sample)
+./build/tempo_data 1000000
 
-# Run benchmark (data/itch_sample must exist)
+# Run benchmark 
 ./build/tempo_bench
 ```
 
