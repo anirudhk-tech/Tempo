@@ -5,9 +5,13 @@ CMakeFiles/
 CMakeScripts/
 cmake_install.cmake
 compile_commands.json
+Makefile
 
 # Data
 data/
 
 # Cache
 .cache/
+
+# IDE
+.DS_Store

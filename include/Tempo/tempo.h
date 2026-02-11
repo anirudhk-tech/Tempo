@@ -82,14 +82,75 @@ struct __attribute__ ((packed)) Cancel {
 
 inline AddOrder parse_add(const uint8_t* buf) { return AddOrder::from_bytes(buf); }
 
-struct TempoHandler {
+struct TempoHandlers {
   void (*on_add) (const AddOrder&);
   void (*on_exec) (const Executed&);
   void (*on_cancel) (const Cancel&);
 };
 
-void parse_stream(const uint8_t* data, size_t len, const TempoHandler& h) {
+inline void parse_stream(const uint8_t* data, size_t len, const TempoHandlers& h) {
   size_t i = 0;
+
+  while (i < len) {
+    char type = static_cast<char>(data[i]);
+    size_t msg_len;
+
+     switch (type) {
+            case 'A': case 'F': msg_len = 35; break;
+            case 'E':           msg_len = 31; break;
+            case 'X':           msg_len = 23; break;
+            case 'D':           msg_len = 19; break;
+            case 'R':           msg_len = 37; break;
+            case 'S':           msg_len = 12; break;
+            default:            return;
+        }
+
+    if (i + msg_len > len) {
+      return;
+    }
+
+    const uint8_t* msg = data + i;
+
+    if (type == 'A' && h.on_add) {
+        auto add = AddOrder::from_bytes(msg);
+        h.on_add(add);
+    } else if (type == 'E' && h.on_exec) {
+        auto ex = Executed::from_bytes(msg);
+        h.on_exec(ex);
+    } else if (type == 'X' && h.on_cancel) {
+        auto cx = Cancel::from_bytes(msg);
+        h.on_cancel(cx);
+    }
+
+    i += msg_len;
+  }
 }
 
+// for benchmarking purposes
+inline AddOrder parse_add_normal(const uint8_t* buf) {
+    AddOrder msg;
+    std::memcpy(&msg, buf, sizeof(AddOrder));
+    return msg;
+}
 
+inline Executed parse_exec_normal(const uint8_t* buf) {
+    Executed msg;
+    std::memcpy(&msg, buf, sizeof(Executed));
+    return msg;
+}
+
+inline Cancel parse_cancel_normal(const uint8_t* buf) {
+    Cancel msg;
+    std::memcpy(&msg, buf, sizeof(Cancel));
+    return msg;
+}
+
+inline AddOrder parse_add_tempo(const uint8_t* buf) {
+    return AddOrder::from_bytes(buf);
+}
+inline Executed parse_exec_tempo(const uint8_t* buf) {
+    return Executed::from_bytes(buf);
+}
+inline Cancel parse_cancel_tempo(const uint8_t* buf) {
+    return Cancel::from_bytes(buf);
+}

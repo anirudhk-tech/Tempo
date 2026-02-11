@@ -13,6 +13,8 @@ target_include_directories(tempo_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable(tempo_bench examples/main.cpp)
 target_link_libraries(tempo_bench PRIVATE tempo_lib)
 
+add_executable(tempo_data src/dataGen.cpp)
+
 target_compile_options(tempo_lib PRIVATE -O3 -Wall -Wextra -Wpedantic)
 target_compile_options(tempo_bench PRIVATE -O3 -Wall -Wextra -Wpedantic)
 
