@@ -148,7 +148,7 @@ The project includes a data generator in `src/dataGen.cpp`. Build the `tempo_dat
 ./build/tempo_data <num_of_adds>
 ```
 
-This writes a binary stream of Add Order messages; Executed and Cancel messages are inserted randomly as well. Redirect or copy the output to `data/itch_sample` (or another path) for use with `tempo_bench`.
+This writes a binary stream of Add Order messages; Executed and Cancel messages are inserted randomly as well.
 
 ## Design
 
