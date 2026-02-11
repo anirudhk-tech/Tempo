@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_library(tempo_lib src/runner.cpp)
+add_library(tempo_lib src/tempo.cpp)
 target_include_directories(tempo_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_executable(tempo_bench examples/main.cpp)
